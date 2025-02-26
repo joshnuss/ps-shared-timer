@@ -2,6 +2,7 @@
   import PartySocket from 'partysocket'
   import { onMount } from 'svelte'
   import * as devalue from 'devalue'
+  import Icon from '@iconify/svelte'
 
   const INTERVAL = 200
   const ws = new PartySocket({
@@ -87,6 +88,8 @@
 </script>
 
 <main>
+  <p>{status}</p>
+
   <h1>
     {#if status == 'stopped'}
       10
@@ -94,17 +97,47 @@
       {(completed/1000).toFixed(0)}
     {/if}
   </h1>
-  <p>{status}</p>
 
-  {#if status == 'stopped'}
-    <button onclick={start}>Start</button>
-  {:else if status == 'running'}
-    <button onclick={pause}>Pause</button>
-    <button onclick={stop}>Stop</button>
-  {:else if status == 'paused'}
-    <button onclick={resume}>Resume</button>
-  {/if}
+  <div class="actions">
+    {#if status == 'stopped'}
+      <button onclick={start}>
+        <Icon icon="solar:play-bold"/>
+      </button>
+    {:else if status == 'running'}
+      <button onclick={pause}>
+        <Icon icon="solar:pause-bold"/>
+      </button>
+      <button onclick={stop}>
+        <Icon icon="solar:stop-bold"/>
+      </button>
+    {:else if status == 'paused'}
+      <button onclick={resume}>
+        <Icon icon="solar:play-broken"/>
+      </button>
+    {/if}
+  </div>
 </main>
 
 <style>
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  h1 {
+    font-size: 8rem;
+  }
+  p {
+    background: var(--purple-8);
+    color: white;
+    padding: var(--size-1) var(--size-2);
+    border-radius: var(--radius-round);
+    font-size: var(--font-size-1);
+    font-weight: bold;
+  }
+  .actions {
+    display: flex;
+    gap: var(--size-1);
+  }
 </style>

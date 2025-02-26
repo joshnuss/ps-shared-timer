@@ -21,6 +21,9 @@ importers:
       '@cloudflare/workers-types':
         specifier: ^4.20250204.0
         version: 4.20250204.0
+      '@iconify/svelte':
+        specifier: ^4.2.0
+        version: 4.2.0(svelte@5.20.0)
       '@sveltejs/vite-plugin-svelte':
         specifier: ^5.0.3
         version: 5.0.3(svelte@5.20.0)(vite@6.1.0)
@@ -33,6 +36,9 @@ importers:
       devalue:
         specifier: ^5.1.1
         version: 5.1.1
+      open-props:
+        specifier: ^1.7.13
+        version: 1.7.13
       svelte:
         specifier: ^5.20.0
         version: 5.20.0
@@ -455,6 +461,14 @@ packages:
   '@hattip/walk@0.0.49':
     resolution: {integrity: sha512-AgJgKLooZyQnzMfoFg5Mo/aHM+HGBC9ExpXIjNqGimYTRgNbL/K7X5EM1kR2JY90BNKk9lo6Usq1T/nWFdT7TQ==}
     hasBin: true
+
+  '@iconify/svelte@4.2.0':
+    resolution: {integrity: sha512-fEl0T7SAPonK7xk6xUlRPDmFDZVDe2Z7ZstlqeDS/sS8ve2uyU+Qa8rTWbIqzZJlRvONkK5kVXiUf9nIc+6OOQ==}
+    peerDependencies:
+      svelte: '>4.0.0'
+
+  '@iconify/types@2.0.0':
+    resolution: {integrity: sha512-+wluvCrRhXrhyOmRDJ3q8mux9JkKy5SJ/v8ol2tu4FVjyYvtEzkc/3pK15ET6RKg4b4w4BmTk1+gsCUhf21Ykg==}
 
   '@img/sharp-darwin-arm64@0.33.5':
     resolution: {integrity: sha512-UT4p+iz/2H4twwAoLCqfA9UH5pI6DggwKEGuaPy7nCVQ8ZsiY5PIcrRvD1DzuY3qYL07NtIQcWnBSY/heikIFQ==}
@@ -931,6 +945,9 @@ packages:
   ohash@1.1.4:
     resolution: {integrity: sha512-FlDryZAahJmEF3VR3w1KogSEdWX3WhA5GPakFx4J81kEAiHyLMpdLLElS8n8dfNadMgAne/MywcvmogzscVt4g==}
 
+  open-props@1.7.13:
+    resolution: {integrity: sha512-A+8iJVr5oOpSrhvJMPz5KRb7ib4kav6V7+0014qpOM+rPukRxibi5BGCmwFECAz8uj6lN3pL1h7yp0ljtxqxuA==}
+
   partyserver@0.0.64:
     resolution: {integrity: sha512-DuEdsGt2kvss6+P517PRY0PgW/C6v3hQaF2XaVCx0ZmLVSAcsYhDjurHvIFwh5Q1Hp5pJ8vvFAEXvfKEZw8Q8Q==}
     peerDependencies:
@@ -1390,6 +1407,13 @@ snapshots:
       cac: 6.7.14
       mime-types: 2.1.35
 
+  '@iconify/svelte@4.2.0(svelte@5.20.0)':
+    dependencies:
+      '@iconify/types': 2.0.0
+      svelte: 5.20.0
+
+  '@iconify/types@2.0.0': {}
+
   '@img/sharp-darwin-arm64@0.33.5':
     optionalDependencies:
       '@img/sharp-libvips-darwin-arm64': 1.0.4
@@ -1821,6 +1845,8 @@ snapshots:
   node-fetch-native@1.6.6: {}
 
   ohash@1.1.4: {}
+
+  open-props@1.7.13: {}
 
   partyserver@0.0.64(@cloudflare/workers-types@4.20250204.0):
     dependencies:

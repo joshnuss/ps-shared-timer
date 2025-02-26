@@ -13,10 +13,12 @@
   "devDependencies": {
     "@cloudflare/vite-plugin": "^0.0.8",
     "@cloudflare/workers-types": "^4.20250204.0",
+    "@iconify/svelte": "^4.2.0",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@tsconfig/svelte": "^5.0.4",
     "date-fns": "^4.1.0",
     "devalue": "^5.1.1",
+    "open-props": "^1.7.13",
     "svelte": "^5.20.0",
     "svelte-check": "^4.1.4",
     "typescript": "~5.7.2",
