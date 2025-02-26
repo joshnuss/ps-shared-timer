@@ -1,14 +1,33 @@
 import { Server, type Connection, routePartykitRequest } from "partyserver"
+import * as devalue from 'devalue'
 
 type Env = {
   MyServer: DurableObjectNamespace<MyServer>
 }
 
 export class MyServer extends Server<Env> {
-  onMessage(conn: Connection, payload: string) {
-    const message = JSON.parse(payload) as Message
+  async onMessage(conn: Connection, payload: string) {
+    const message = devalue.parse(payload) as Message
 
-    conn.send(JSON.stringify(message))
+    switch (message.type) {
+      case 'start':
+        await this.ctx.storage.put('start', message.now)
+        await this.ctx.storage.setAlarm(message.now.getTime() + (message.duration*1000))
+        break
+
+      case 'stop':
+        await this.ctx.storage.deleteAll()
+        await this.ctx.storage.deleteAlarm()
+        break
+    }
+
+    this.broadcast(devalue.stringify(message))
+  }
+
+  async onAlarm() {
+    const stop: StopMessage = { type: 'stop' }
+
+    this.broadcast(devalue.stringify(stop))
   }
 }
 

@@ -1,67 +1,110 @@
 <script lang="ts">
   import PartySocket from 'partysocket'
   import { onMount } from 'svelte'
+  import * as devalue from 'devalue'
 
+  const INTERVAL = 200
   const ws = new PartySocket({
     host: window.location.host,
     room: 'room1',
     party: 'my-server',
   })
 
-  let message = $state<Message>()
+  type Status = 'stopped' | 'running' | 'paused'
+
+  let status = $state<Status>('stopped')
+  let startAt = $state(new Date())
+  let duration = $state(0)
+  let completed = $state(0)
+  let interval: number | undefined
 
   onMount(() => {
     ws.addEventListener('message', onMessage)
-
-    const message: Message = {
-      type: 'message',
-      value: 'hello from the client'
-    }
-    ws.send(JSON.stringify(message))
   })
 
   function onMessage(event: MessageEvent) {
-    message = JSON.parse(event.data) as Message
+    const message = devalue.parse(event.data) as Message
+
+    switch(message.type) {
+      case 'start':
+        status = 'running'
+        startAt = message.now
+        duration = message.duration
+        interval = setInterval(onInterval, INTERVAL)
+        break
+
+      case 'pause':
+        status = 'paused'
+        clearInterval(interval)
+        break
+
+      case 'resume':
+        status = 'running'
+        interval = setInterval(onInterval, INTERVAL)
+        break
+
+      case 'stop':
+        status = 'stopped'
+        completed = 0
+        duration = 0
+        clearInterval(interval)
+        break
+    }
+  }
+
+  function onInterval() {
+    completed = Date.now() - startAt.getTime()
+
+    if (completed/1000 >= duration) {
+      status = 'stopped'
+      completed = duration * 1000
+      clearInterval(interval)
+    }
+  }
+
+  function start() {
+    duration = 10
+    send({ type: 'start', now: new Date(), duration })
+  }
+
+  function pause() {
+    send({ type: 'pause', completed: 0 })
+  }
+
+  function stop() {
+    send({ type: 'stop' })
+  }
+
+  function resume() {
+    send({ type: 'resume' })
+  }
+
+  function send(message: Message) {
+    const payload = devalue.stringify(message)
+
+    ws.send(payload)
   }
 </script>
 
 <main>
-  <div>
-    <a href="https://vite.dev" target="_blank" rel="noreferrer">
-      <img src='/vite.svg' class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer">
-      <img src='/svelte.svg' class="logo svelte" alt="Svelte Logo" />
-    </a>
-    <a href="https://partykit.io" target="_blank" rel="noreferrer">
-      <img src='/partykit.png' class="logo" alt="PartyKit Logo" />
-    </a>
-  </div>
-  <h1>Vite + Svelte + PartyKit</h1>
+  <h1>
+    {#if status == 'stopped'}
+      10
+    {:else}
+      {(completed/1000).toFixed(0)}
+    {/if}
+  </h1>
+  <p>{status}</p>
 
-  <p class="read-the-docs">
-    Click on the PartyKit, Vite and Svelte logos to learn more
-  </p>
-
-  <div class="card">
-    {JSON.stringify(message)}
-  </div>
+  {#if status == 'stopped'}
+    <button onclick={start}>Start</button>
+  {:else if status == 'running'}
+    <button onclick={pause}>Pause</button>
+    <button onclick={stop}>Stop</button>
+  {:else if status == 'paused'}
+    <button onclick={resume}>Resume</button>
+  {/if}
 </main>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
-  }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
-  }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
-  }
-  .read-the-docs {
-    color: #888;
-  }
 </style>
