@@ -8,15 +8,20 @@
     party: 'my-server',
   })
 
-  let message = $state()
+  let message = $state<Message>()
 
   onMount(() => {
     ws.addEventListener('message', onMessage)
-    ws.send('hello from the client!')
+
+    const message: Message = {
+      type: 'message',
+      value: 'hello from the client'
+    }
+    ws.send(JSON.stringify(message))
   })
 
   function onMessage(event: MessageEvent) {
-    message = event.data
+    message = JSON.parse(event.data) as Message
   }
 </script>
 
@@ -39,7 +44,7 @@
   </p>
 
   <div class="card">
-    {message}
+    {JSON.stringify(message)}
   </div>
 </main>
 

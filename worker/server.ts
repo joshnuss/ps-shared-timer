@@ -5,10 +5,10 @@ type Env = {
 }
 
 export class MyServer extends Server<Env> {
-  onMessage(conn: Connection, message: string) {
-    console.log("message from client:", message)
+  onMessage(conn: Connection, payload: string) {
+    const message = JSON.parse(payload) as Message
 
-    conn.send('hello from server')
+    conn.send(JSON.stringify(message))
   }
 }
 
