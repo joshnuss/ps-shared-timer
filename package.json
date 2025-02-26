@@ -15,6 +15,8 @@
     "@cloudflare/workers-types": "^4.20250204.0",
     "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@tsconfig/svelte": "^5.0.4",
+    "date-fns": "^4.1.0",
+    "devalue": "^5.1.1",
     "svelte": "^5.20.0",
     "svelte-check": "^4.1.4",
     "typescript": "~5.7.2",
